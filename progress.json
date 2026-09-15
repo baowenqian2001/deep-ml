@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-09-15T14:40:35.223Z",
+  "items": {
+    "problem:1208": {
+      "kind": "problem",
+      "id": "1208",
+      "title": "Dot Product",
+      "difficulty": "medium",
+      "category": "Cuda",
+      "url": "https://www.deep-ml.com/problems/1208",
+      "path": "problems/1208-dot-product",
+      "first_solved_at": "2026-09-15T14:40:29.687Z",
+      "last_pushed_at": "2026-09-15T14:40:29.687Z",
+      "language": "python",
+      "lines": 59
+    }
+  }
+}
