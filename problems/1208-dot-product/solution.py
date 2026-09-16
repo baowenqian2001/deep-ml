@@ -13,40 +13,40 @@ __global__ void dot_kernel(const float* a, const float* b, float* out, int n) {
     }
     __syncthreads();
 
-    for(int stride = blockDim.x / 2; stride > 0; stride /= 2){
+    for (int stride = blockDim.x / 2; stride > 0; stride /= 2){
         if (tid < stride){
             shared[tid] += shared[tid + stride];
         }
         __syncthreads();
     }
-    if (tid == 0){
+    if(tid == 0){
         *out = shared[0];
     }
 }
 
 float dot_product(const std::vector<float>& a, const std::vector<float>& b) {
-    int n = static_cast<int>(a.size());
-
-    float *d_a, *d_b, *d_out;
+    int n = static_cast<int>(a.size()); // 将a的size_t转换为int static_cast是显示转换
+    
+    float *d_a, *d_b, *d_result;
     cudaMalloc(&d_a, n * sizeof(float));
     cudaMalloc(&d_b, n * sizeof(float));
-    cudaMalloc(&d_out, sizeof(float));
+    cudaMalloc(&d_result, sizeof(float));
 
     cudaMemcpy(d_a, a.data(), n * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(d_b, b.data(), n * sizeof(float), cudaMemcpyHostToDevice);
 
     int threads = 256;
 
-    dot_kernel<<<1, threads>>>(d_a, d_b, d_out, n);
+    dot_kernel<<<1, threads>>>(d_a, d_b, d_result, n);
 
     float result;
     
-    cudaMemcpy(&result, d_out, sizeof(float), cudaMemcpyDeviceToHost);
-
-    // 释放cuda内存
+    cudaMemcpy(&result, d_result, sizeof(float), cudaMemcpyDeviceToHost);
+    
+    // cuda cudaFree()
     cudaFree(d_a);
     cudaFree(d_b);
-    cudaFree(d_out);
+    cudaFree(d_result);
     
     return result;
 }
